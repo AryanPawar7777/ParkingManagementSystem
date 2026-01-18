@@ -24,3 +24,9 @@ Thumbs.db
 # Build output
 out/
 bin/
+
+
+target/
+**/target/
+
+application.properties
