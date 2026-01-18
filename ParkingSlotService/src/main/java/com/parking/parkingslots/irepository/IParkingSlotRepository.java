@@ -10,4 +10,11 @@ public interface IParkingSlotRepository {
      boolean isSlotAvailable(String slotNumber);
       void addParkingSlot(ParkingSlot slot);
       void updateSlotAvailability(Long slotId, boolean isAvailable);
+      void deleteParkingSlot(Long slotId);
+
+
+       List<ParkingSlot> getParkingSlotsByPage(int offset, int limit);
+
+           int getTotalParkingSlotsCount();
+
 }

@@ -3,9 +3,11 @@ package com.parking.parkingslots.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import com.parking.parkingslots.service.ParkingSlotService;
 import com.parking.parkingslots.dto.ParkingSlotDto;
+import com.parking.parkingslots.dto.PaginatedResponse;
 
 @RestController
 @RequestMapping("/slots")
@@ -57,4 +59,22 @@ public class ParkingSlotController {
         // Return updated slot DTO
         return parkingSlotService.getSlotById(slotId);
     }
+
+
+@DeleteMapping("/delete/{slotId}")
+public String deleteSlot(@PathVariable("slotId") Long slotId) {
+    parkingSlotService.deleteSlot(slotId);
+    return "Slot with ID " + slotId + " deleted successfully.";
+}
+
+
+@GetMapping("/nextpage")
+public ResponseEntity<PaginatedResponse<ParkingSlotDto>> getPaginatedSlots(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(required = false) Integer size
+) {
+    PaginatedResponse<ParkingSlotDto> response = parkingSlotService.getPaginatedSlots(page, size);
+    return ResponseEntity.ok(response);
+}
+
 }

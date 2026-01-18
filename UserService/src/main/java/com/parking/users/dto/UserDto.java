@@ -7,6 +7,7 @@ public class UserDto {
     private String email;
     private String phone;
     private String vehicleNumber;
+    private Long slotId;
 
     public UserDto() {}
 

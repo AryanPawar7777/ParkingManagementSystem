@@ -9,6 +9,9 @@ public interface IPaymentRepository {
     List<Payment> getPaymentsByReservationId(Long reservationId);
       List<Payment> getAllPayments();
       List<Payment> findByUserId(Long userId);
+      
+List<Payment> getPaymentsByPage(int offset, int limit);
+int getTotalPaymentsCount();
 
 }
 

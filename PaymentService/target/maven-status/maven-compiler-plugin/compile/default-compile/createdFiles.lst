@@ -1,9 +1,0 @@
-com\parking\payments\PaymentServiceApplication.class
-com\parking\payments\config\ApplicationConfig.class
-com\parking\payments\controller\PaymentController.class
-com\parking\payments\model\Payment.class
-com\parking\payments\irepository\IPaymentRepository.class
-com\parking\payments\service\PaymentService.class
-com\parking\payments\repository\PaymentRowMapper.class
-com\parking\payments\repository\PaymentRepository.class
-com\parking\payments\dto\PaymentDto.class

@@ -1,12 +1,20 @@
 package com.parking.users.model;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "users")
 public class User {
 
+        @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String name;
     private String email;
     private String phone;
     private String vehicleNumber;
+    private Long slotId;
 
     public User() {}
 
@@ -16,6 +24,7 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.vehicleNumber = vehicleNumber;
+        
     }
 
     public Long getUserId() {
@@ -57,4 +66,7 @@ public class User {
     public void setVehicleNumber(String vehicleNumber) {
         this.vehicleNumber = vehicleNumber;
     }
+
+     public Long getSlotId() { return slotId; }
+    public void setSlotId(Long slotId) { this.slotId = slotId; }
 }

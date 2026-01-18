@@ -6,7 +6,9 @@ import com.parking.payments.model.Payment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.parking.payments.dto.PaginatedResponse;
+import org.springframework.beans.factory.annotation.Value;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,4 +59,25 @@ public class PaymentService {
                 .map(payment -> modelMapper.map(payment, PaymentDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Value("${com.parking.payments.pagination.size:10}")
+private int defaultPageSize;
+
+public PaginatedResponse<PaymentDto> getPaginatedPayments(int page, Integer size) {
+    int pageSize = (size != null && size > 0) ? size : defaultPageSize;
+    int offset = page * pageSize;
+
+    int totalElements = paymentRepository.getTotalPaymentsCount();
+    int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+
+    List<Payment> payments = paymentRepository.getPaymentsByPage(offset, pageSize);
+    List<PaymentDto> paymentDtos = new ArrayList<>();
+    for (Payment payment : payments) {
+        paymentDtos.add(modelMapper.map(payment, PaymentDto.class));
+    }
+
+    return new PaginatedResponse<>(page, pageSize, totalPages, totalElements, paymentDtos);
 }
+
+}
+

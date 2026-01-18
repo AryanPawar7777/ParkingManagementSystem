@@ -1,8 +1,5 @@
 package com.parking.parkingslots.dto;
 
-/**
- * DTO representing user details for parking service.
- */
 public class UserDto {
 
     private Long userId;
@@ -11,9 +8,7 @@ public class UserDto {
     private String phone;
     private String vehicleNumber;
 
-    public UserDto() {
-        // default constructor
-    }
+    public UserDto() {}
 
     public UserDto(Long userId, String name, String email, String phone, String vehicleNumber) {
         this.userId = userId;

@@ -70,5 +70,17 @@ public class PaymentRepository implements IPaymentRepository {
         payment.setTimestamp(rs.getTimestamp("timestamp")); // ✅ Include timestamp
         return payment;
     }
+
+    @Override
+public List<Payment> getPaymentsByPage(int offset, int limit) {
+    String sql = "SELECT * FROM payments LIMIT ? OFFSET ?";
+    return jdbcTemplate.query(sql, new PaymentRowMapper(), limit, offset);
+}
+
+@Override
+public int getTotalPaymentsCount() {
+    String sql = "SELECT COUNT(*) FROM payments";
+    return jdbcTemplate.queryForObject(sql, Integer.class);
+}
 }
 

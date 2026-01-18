@@ -5,6 +5,8 @@ import com.parking.parkingslots.model.ParkingSlot;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+// The import you added is correct.
+import com.parking.parkingslots.repository.ParkingSlotRowMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +15,9 @@ import java.util.List;
 public class ParkingSlotRepository implements IParkingSlotRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
+    // CORRECTED: This field is now used throughout the class.
+    private static final ParkingSlotRowMapper PARKING_SLOT_ROW_MAPPER = new ParkingSlotRowMapper();
 
     @Autowired
     public ParkingSlotRepository(JdbcTemplate jdbcTemplate) {
@@ -24,7 +29,8 @@ public class ParkingSlotRepository implements IParkingSlotRepository {
         List<ParkingSlot> slots;
         String sql = "SELECT * FROM parking_slots";
         try {
-            slots = jdbcTemplate.query(sql, new ParkingSlotRowMapper());
+            // UPDATED: Using the static final field
+            slots = jdbcTemplate.query(sql, PARKING_SLOT_ROW_MAPPER);
         } catch (Exception e) {
             System.out.println("Error fetching parking slots: " + e.getMessage());
             slots = new ArrayList<>();
@@ -36,7 +42,8 @@ public class ParkingSlotRepository implements IParkingSlotRepository {
     public ParkingSlot getParkingSlotById(Long slotId) {
         String sql = "SELECT * FROM parking_slots WHERE slot_id = ?";
         try {
-            return jdbcTemplate.queryForObject(sql, new ParkingSlotRowMapper(), slotId);
+            // UPDATED: Using the static final field
+            return jdbcTemplate.queryForObject(sql, PARKING_SLOT_ROW_MAPPER, slotId);
         } catch (Exception e) {
             System.out.println("Error fetching slot by ID: " + e.getMessage());
             return null;
@@ -73,4 +80,33 @@ public class ParkingSlotRepository implements IParkingSlotRepository {
             System.out.println("Error updating slot availability: " + e.getMessage());
         }
     }
+
+    @Override
+    public void deleteParkingSlot(Long slotId) {
+        String sql = "DELETE FROM parking_slots WHERE slot_id = ?";
+        try {
+            int rows = jdbcTemplate.update(sql, slotId);
+            if (rows > 0) {
+                System.out.println("Deleted slot with ID: " + slotId);
+            } else {
+                System.out.println("No slot found with ID: " + slotId);
+            }
+        } catch (Exception e) {
+            System.out.println("Error deleting parking slot: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<ParkingSlot> getParkingSlotsByPage(int offset, int limit) {
+        String sql = "SELECT * FROM parking_slots LIMIT ? OFFSET ?";
+        // FIX: Replaced the undefined 'parkingSlotRowMapper' variable with the defined static field
+        return jdbcTemplate.query(sql, PARKING_SLOT_ROW_MAPPER, limit, offset);
+    }
+
+    @Override
+    public int getTotalParkingSlotsCount() {
+        String sql = "SELECT COUNT(*) FROM parking_slots";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
 }

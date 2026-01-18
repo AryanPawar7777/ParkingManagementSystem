@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.parking.users.dto.PaginatedResponse;
+import org.springframework.http.ResponseEntity;
 
 
 @RestController
@@ -35,8 +37,8 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
-    @GetMapping("/vehicle")
-    public UserDto getUserByVehicleNumber(@RequestParam String vehicleNumber) {
+    @GetMapping("/vehicle/{vehicleNumber}")
+    public UserDto getUserByVehicleNumber(@PathVariable String vehicleNumber) {
         return userService.getUserByVehicleNumber(vehicleNumber);
     }
 
@@ -51,4 +53,13 @@ public class UserController {
         userService.addUser(userDto);
         return userDto;
     }
+
+    @GetMapping("/nextpage")
+public ResponseEntity<PaginatedResponse<UserDto>> getPaginatedUsers(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(required = false) Integer size
+) {
+    PaginatedResponse<UserDto> response = userService.getPaginatedUsers(page, size);
+    return ResponseEntity.ok(response);
+}
 }
